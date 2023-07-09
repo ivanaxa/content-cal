@@ -2,6 +2,7 @@ package com.lunarllc.contentcalendar.controller;
 
 import com.lunarllc.contentcalendar.model.Content;
 import com.lunarllc.contentcalendar.repository.ContentCollectionRespository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/content")
+@CrossOrigin()
 public class ContentController {
 
     //we know the Content Controller depends on the ContentCollectionRepository so we will inject the CCR repo into the
@@ -40,7 +42,7 @@ public class ContentController {
 
     //we can build Read, Update, Delete as well as other Gets
     @GetMapping("/{id}")
-    public Optional<Content> findById(@PathVariable Integer id) {
+    public Optional<Content> findById( @PathVariable Integer id) {
         logger.info("GET CONTENT BY ID: " + id.toString());
         return Optional.ofNullable(repo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found.")));
@@ -49,7 +51,7 @@ public class ContentController {
     //create a new Content
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public void create(@RequestBody Content content) {
+    public void create(@Valid @RequestBody Content content) {
         logger.info("POST CONTENT: " + content.toString());
         repo.createContent(content);
     }
